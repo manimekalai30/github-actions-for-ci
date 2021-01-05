@@ -8,51 +8,8 @@ on:
       - master
       - dev
 jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         node-version: [12.x]
-#     steps:
-#       - uses: actions/checkout@v1
-#       - name: Build Application
-#         run: |
-#           echo ${GITHUB_REF#refs/heads/}
-#   test:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         os: [ubuntu-16.04]
-#         node-version: [12.x]
-#     steps:
-#       - uses: actions/checkout@v1
-#       - name: Test Application
-#         run: |
-#           echo ${GITHUB_REF#refs/heads/}
-#   lint:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         os: [ubuntu-16.04]
-#         node-version: [12.x]
-#     steps:
-#       - uses: actions/checkout@v1
-#       - name: Test lint
-#         run: |
-#           echo ${GITHUB_REF#refs/heads/}
   deploy-to-stage:
-    if: github.event_name == 'pull_request'  && github.event.action == 'merged'
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-16.04]
-    steps:
-      - uses: actions/checkout@v1
-      - name: Deploy Staging
-        run: |
-          echo ${GITHUB_REF#refs/heads/}
-  deploy-to-live:
-    if: github.event_name == 'pull_request'  && github.event.action == 'opened'
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -60,7 +17,14 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Deploy Live
-        run: |
-          echo ${GITHUB_REF#refs/heads/}
-          echo if: ${{ github.event.pull_request.base.ref }} == '0mainoi'
-          echo if: ${{ github.event.pull_request.base.ref }} == 'main'
+        run: echo ${GITHUB_REF#refs/heads/}
+  deploy-to-live:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-16.04]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Deploy Live
+        run: echo ${GITHUB_REF#refs/heads/}
