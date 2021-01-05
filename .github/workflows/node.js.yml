@@ -2,11 +2,9 @@ name: A workflow for Node CI&CD
 
 on:
   pull_request:
+    branches:
+      - mains
     types: [opened,closed]
-  push:
-    branches-ignore:
-      - master
-      - dev
 jobs:
 #   build:
 #     runs-on: ubuntu-latest
