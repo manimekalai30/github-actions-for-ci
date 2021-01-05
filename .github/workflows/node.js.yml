@@ -57,3 +57,4 @@ jobs:
       - name: Deploy Live
         run: |
           echo ${GITHUB_REF#refs/heads/}
+          echo if: github.event_name == 'pull_request' && ${{ github.event.pull_request.base.ref }} == '0mainoi'
