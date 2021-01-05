@@ -1,29 +1,30 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js CI
+name: A workflow for Node CI&CD
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
-
+    types: [opened,closed]
+  push:
+    branches-ignore:
+      - master
+      - dev
 jobs:
-  build:
-
+  deploy-to-stage:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
-
+        os: [ubuntu-16.04]
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      - uses: actions/checkout@v1
+      - name: Deploy Live
+        run: echo ${GITHUB_REF#refs/heads/}
+  deploy-to-live:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-16.04]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Deploy Live
+        run: echo ${GITHUB_REF#refs/heads/}
