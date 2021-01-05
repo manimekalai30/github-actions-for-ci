@@ -2,7 +2,6 @@ name: A workflow for Node CI&CD
 
 on:
   pull_request:
-    types: [opened,closed]
   push:
     branches-ignore:
       - master
