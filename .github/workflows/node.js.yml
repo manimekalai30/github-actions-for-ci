@@ -2,11 +2,6 @@ name: A workflow for Node CI&CD
 
 on:
   pull_request:
-    types: [closed,opened]
-  push:
-    branches-ignore:
-      - master
-      - dev
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -59,6 +54,6 @@ jobs:
         os: [ubuntu-16.04]
     steps:
       - uses: actions/checkout@v1
-      - name: Deploy Staging
+      - name: Deploy Live
         run: |
           echo ${GITHUB_REF#refs/heads/}
