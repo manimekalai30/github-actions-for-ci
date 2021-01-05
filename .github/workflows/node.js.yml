@@ -41,7 +41,7 @@ jobs:
 #         run: |
 #           echo ${GITHUB_REF#refs/heads/}
   deploy-to-stage:
-    if: github.event_name == 'pull_request'  && github.event.action == 'merged'
+    if: github.event_name == 'pull_request'  && github.event.action == 'merged' && github.event.pull_request.base.ref == 'dev'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -52,7 +52,7 @@ jobs:
         run: |
           echo ${GITHUB_REF#refs/heads/}
   deploy-to-live:
-    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    if: github.event_name == 'pull_request'  && github.event.action == 'merged' && github.event.pull_request.base.ref == 'master'
     runs-on: ubuntu-latest
     strategy:
       matrix:
