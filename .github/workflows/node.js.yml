@@ -15,7 +15,6 @@ jobs:
       matrix:
         os: [ubuntu-16.04]
     steps:
-      - uses: actions/checkout@v1
       - name: Deploy Live
         run: echo ${GITHUB_REF#refs/heads/}
   deploy-to-live:
@@ -25,6 +24,5 @@ jobs:
       matrix:
         os: [ubuntu-16.04]
     steps:
-      - uses: actions/checkout@v1
       - name: Deploy Live
         run: echo ${GITHUB_REF#refs/heads/}
