@@ -32,12 +32,12 @@ jobs:
           echo ${GITHUB_REF#refs/heads/}
       - name: Test
         run: |
-          echo ${GITHUB_REF#refs/heads/}
+          echo ${GITHUB_REF#refs/heads/}t
       - name: Lint
         run: |
           echo ${GITHUB_REF#refs/heads/}
           
-      - if: github.event_name == 'pull_request' && github.event.action == 'merged' && github.event.pull_request.base.ref == 'dev'
+      - if: github.event_name == 'pull_request' && github.event.action == 'open' && github.event.pull_request.base.ref == 'main'
       - name: 'Automated Version'
         id: version-bump
         uses: 'phips28/gh-action-bump-version@master'
@@ -45,6 +45,21 @@ jobs:
           tag-prefix:  'staging-' # If we to append prefix we can add
           target-branch: 'manimekalai30-patch-2'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: "Print Tags"
-        run: echo ${{ steps.version-bump.outputs.newTag }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   
+      
+      - if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.base.ref == 'main'
+      - name: "Print Tag"
+        run: |
+          echo ${{ steps.version-bump.outputs.newTag }}
+
+      - if: github.event_name == 'pull_request' # && github.event.action == 'merged' && github.event.pull_request.base.ref == 'dev'
+      # - name: Deploy Staging
+      #   uses: google-github-actions/deploy-appengine@main
+      #   with:
+      #     project: stag-awhours
+      #     deliverables: stage-app.yaml
+      #     credentials: ${{ secrets.gcp_credentials }}
+      #     promote: false
+      #     version: 2
+      # - name: Deploy to App Engine
+      #   run: npm run build && gcloud app deploy
