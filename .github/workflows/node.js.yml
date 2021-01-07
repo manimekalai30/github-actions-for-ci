@@ -14,18 +14,18 @@ jobs:
       matrix:
         node-version: [12.x]
     steps:
-        - uses: actions/checkout@v1
-        - if: github.event_name == 'pull_request' && github.event.action == 'open' && github.event.pull_request.base.ref == 'main'
-        - name: 'Automated Version'
-          id: version-bump
-          uses: 'phips28/gh-action-bump-version@master'
-          with:
-            tag-prefix:  'staging-' # If we to append prefix we can add
-            target-branch: 'manimekalai30-patch-2'
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   
+      - if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.base.ref == 'main'
+      - uses: actions/checkout@v1
+      - name: 'Automated Version'
+        id: version-bump
+        uses: 'phips28/gh-action-bump-version@master'
+        with:
+          tag-prefix:  'staging-' # If we to append prefix we can add
+          target-branch: 'manimekalai30-patch-2'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   
 
-        - if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.base.ref == 'main'
-        - name: 'Print Version'
-          run: |
-            echo ${{ steps.version-bump.outputs.newTag }}
+      - if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.base.ref == 'main'
+      - name: 'Print Version'
+        run: |
+          echo ${{ steps.version-bump.outputs.newTag }}
