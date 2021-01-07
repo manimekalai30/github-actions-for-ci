@@ -8,41 +8,41 @@ on:
       - master
       - dev
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-16.04]
         node-version: [12.x]
     steps:
-      - name: Test Application
-        run: echo ${GITHUB_REF#refs/heads/}
-  lint:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-16.04]
-        node-version: [12.x]
-    steps:
-      - name: Test lint        
-        run: echo ${GITHUB_REF#refs/heads/}
+      - uses: actions/checkout@v1
 
-          
-  deploy-to-stage:
-    if: github.event_name == 'pull_request'  && github.event.action == 'opened' && github.event.pull_request.base.ref == 'main'
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-16.04]
-    steps:
-      - name: Deploy Live
-        run: echo ${GITHUB_REF#refs/heads/}
-  deploy-to-live:
-    if: github.event_name == 'pull_request'  && (github.event.action == 'opened' || github.event.action == 'closed') && github.event.pull_request.base.ref == 'main'
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-16.04]
-    steps:
-      - name: Deploy Live
-        run: echo ${GITHUB_REF#refs/heads/}
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          # npm cache files are stored in `~/.npm` on ubuntu-latest
+          path: ~/.npm
+          key: ${{ runner.os }}-build-cache-node-modules
+          restore-keys: |
+            ${{ runner.os }}-build-cache-node-modules
+      - name: Install Dependencies
+        run: |
+          npm ci
+      - name: Build
+        run: |
+          echo ${GITHUB_REF#refs/heads/}
+      - name: Test
+        run: |
+          echo ${GITHUB_REF#refs/heads/}
+      - name: Lint
+        run: |
+          echo ${GITHUB_REF#refs/heads/}
+      - name: 'Automated Version'
+        id: version-bump
+        uses: 'phips28/gh-action-bump-version@master'
+        with:
+          tag-prefix:  'staging-' # If we to append prefix we can add
+          target-branch: 'dev'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Print Tag"
+        run: echo ${{ steps.version-bump.outputs.newTag }}
