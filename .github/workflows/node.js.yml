@@ -44,5 +44,5 @@ jobs:
           target-branch: 'manimekalai30-patch-2'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: "Print Tag"
+      - name: "Print Tags"
         run: echo ${{ steps.version-bump.outputs.newTag }}
