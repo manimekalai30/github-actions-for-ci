@@ -41,7 +41,7 @@ jobs:
         uses: 'phips28/gh-action-bump-version@master'
         with:
           tag-prefix:  'staging-' # If we to append prefix we can add
-          target-branch: 'dev'
+          target-branch: 'manimekalai30-patch-2'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Print Tag"
