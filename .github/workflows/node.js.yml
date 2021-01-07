@@ -36,6 +36,7 @@ jobs:
       - name: Lint
         run: |
           echo ${GITHUB_REF#refs/heads/}
+          
       - if: github.event_name == 'pull_request' && github.event.action == 'merged' && github.event.pull_request.base.ref == 'dev'
       - name: 'Automated Version'
         id: version-bump
