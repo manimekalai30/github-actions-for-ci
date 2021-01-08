@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: 'Automated Version'
-        if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.base.ref == 'main'
+        if: github.event_name == 'pull_request' 
         id: version-bump
         uses: 'phips28/gh-action-bump-version@master'
         with:
@@ -21,7 +21,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   
 
-      - name: 'Print Version'
-        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.base.ref == 'main'
-        run: |
-          echo ${{ steps.version-bump.outputs.newTag }}
+      - name: 'Deploy'
+        # if: github.event_name == 'pull_request' && github.event.action == 'merged' && github.event.pull_request.base.ref == 'dev'
+        uses: google-github-actions/deploy-appengine@main
+        with:
+          project: stag-awhours
+          deliverables: ../stage-app.yaml
+          credentials: ${{ secrets.gcp_credentials }}
+          promote: false
+          version: 'redis'
