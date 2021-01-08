@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: 'Automated Version'
-        if: github.event_name == 'pull_request' 
+#         if: github.event_name == 'pull_request' 
         id: version-bump
         uses: 'phips28/gh-action-bump-version@master'
         with:
