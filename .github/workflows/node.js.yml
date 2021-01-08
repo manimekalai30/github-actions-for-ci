@@ -25,7 +25,7 @@ jobs:
         # if: github.event_name == 'pull_request' && github.event.action == 'merged' && github.event.pull_request.base.ref == 'dev'
         uses: google-github-actions/deploy-appengine@main
         with:
-          project: stag-awhours
+          project_id: stag-awhours
           deliverables: ../stage-app.yaml
           credentials: ${{ secrets.gcp_credentials }}
           promote: false
