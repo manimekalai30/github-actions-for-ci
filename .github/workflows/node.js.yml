@@ -23,14 +23,15 @@ jobs:
         run: |
           npm ci
 
-#       - name: Publish package
-#       - uses: actions/setup-node@v1
-#         with:
-#           node-version: '12.x'
-#           registry-url: 'https://npm.pkg.github.com'
-#           # Defaults to the user or organization that owns the workflow file
-#           scope: '@Adaptavant'
-#       - run: npm install
-#       - run: npm publish
-#         env:
-#           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@Adaptavant'
+  
+      - name: Publish package
+        run: |
+          npm install
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
