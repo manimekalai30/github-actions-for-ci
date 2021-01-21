@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: '12.x'
           registry-url: 'https://npm.pkg.github.com'
-          scope: '@Adaptavant'
+          scope: '@manimekalai30'
   
       - name: Publish package
         run: |
