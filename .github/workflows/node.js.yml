@@ -31,6 +31,17 @@ jobs:
       - name: Sonarqube Report
         run: |
           echo ${GITHUB_REF#refs/heads/}
+          
+      - name: Get version 
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+        with:
+          path: ${{ github.workspace }}/package.json
+          
+      - name: Version
+        run: |
+          echo ${{ steps.package-version.outputs.current-version}}
+         
       - name: Create Release
         uses: actions/create-release@v1
         env:
