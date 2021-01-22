@@ -35,8 +35,6 @@ jobs:
       - name: Get version 
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
-        with:
-          path: ${{ github.workspace }}/package.json
           
       - name: Version
         run: |
