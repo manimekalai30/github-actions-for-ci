@@ -36,7 +36,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ github.workspace }}/package.version  #${{ github.ref }}
+          tag_name: $(grep -m1 version package.json)
           release_name: Release ${{ github.ref }}
           body: |
             Changes in this Release
