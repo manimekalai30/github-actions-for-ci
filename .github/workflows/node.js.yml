@@ -1,8 +1,11 @@
 name: Publish a package
 on:
-  push:
+  pull_request:
+    types: [closed]
+    branches: [main]
 jobs:
-  run-npm-build:
+  run-build-test-lint-publish-package:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -10,28 +13,18 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Cache node modules
-        uses: actions/cache@v2
-        with:
-          # npm cache files are stored in `~/.npm` on ubuntu-latest
-          path: ~/.npm
-          key: ${{ runner.os }}-build-cache-node-modules
-          restore-keys: |
-            ${{ runner.os }}-build-cache-node-modules
-
-      - name: Install Dependencies
+      - name: Build
         run: |
-          npm ci
+          npm echo ${GITHUB_REF#refs/heads/}
 
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@manimekalai30'
-  
-      - name: Publish package
+      - name: Test
         run: |
-          npm install
-          npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          npm echo ${GITHUB_REF#refs/heads/}t
+
+      - name: Lint
+        run: |
+          npm echo ${GITHUB_REF#refs/heads/}
+
+      - name: Sonarqube Report
+        run: |
+          npm echo ${GITHUB_REF#refs/heads/}
