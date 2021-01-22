@@ -1,0 +1,47 @@
+name: Publish a package
+on:
+  pull_request:
+    types: [opened]
+    branches: [main]
+     # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0 ect.,,
+jobs:
+  run-build-test-lint-publish-package:
+    if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Build
+        run: |
+          echo ${GITHUB_REF#refs/heads/}
+
+      - name: Test
+        run: |
+          echo ${GITHUB_REF#refs/heads/}t
+
+      - name: Lint
+        run: |
+          echo ${GITHUB_REF#refs/heads/}
+
+      - name: Sonarqube Report
+        run: |
+          echo ${GITHUB_REF#refs/heads/}
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
+
