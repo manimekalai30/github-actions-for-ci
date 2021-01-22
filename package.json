@@ -1,11 +1,14 @@
 {
-  "name": "actions-template",
-  "version": "1.0.0",
+  "name":  "@manimekalai30/actions-template",
+  "version": "1.0.8",
   "description": "Learn how to use GitHub Actions!",
   "main": "index.js",
   "directories": {
     "test": "__test__",
     "src": "src"
+  },
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com/@manimekalai30"
   },
   "scripts": {
     "build": "npx webpack --config ./src/webpack.config.js --mode production",
