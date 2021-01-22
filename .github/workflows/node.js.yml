@@ -15,16 +15,16 @@ jobs:
 
       - name: Build
         run: |
-          npm echo ${GITHUB_REF#refs/heads/}
+          echo ${GITHUB_REF#refs/heads/}
 
       - name: Test
         run: |
-          npm echo ${GITHUB_REF#refs/heads/}t
+          echo ${GITHUB_REF#refs/heads/}t
 
       - name: Lint
         run: |
-          npm echo ${GITHUB_REF#refs/heads/}
+          echo ${GITHUB_REF#refs/heads/}
 
       - name: Sonarqube Report
         run: |
-          npm echo ${GITHUB_REF#refs/heads/}
+          echo ${GITHUB_REF#refs/heads/}
