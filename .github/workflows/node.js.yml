@@ -8,7 +8,6 @@ on:
       - 'v*' # Push events to matching v*, i.e. v1.0 ect.,,
 jobs:
   run-build-test-lint-publish-package:
-    if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -19,32 +18,27 @@ jobs:
       - name: Build
         run: |
           echo ${GITHUB_REF#refs/heads/}
-
-      - name: Test
-        run: |
-          echo ${GITHUB_REF#refs/heads/}t
-
-      - name: Lint
-        run: |
-          echo ${GITHUB_REF#refs/heads/}
-
-      - name: Sonarqube Report
-        run: |
-          echo ${GITHUB_REF#refs/heads/}
           
       - name: Get version 
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
         
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      - name: deploy based on condition
+        # Deploy into stage Env if pull request merged in dev branch
+        if: github.event_name == 'pull_request' && github.event.action == 'merged' && github.event.pull_request.base.ref == 'dev'
+        uses: google-github-actions/deploy-appengine@main
         with:
-          tag_name:  ${{ steps.package-version.outputs.current-version}}
-          release_name: Release ${{ steps.package-version.outputs.current-version}}
-          body: |
-            Initial release
-          draft: false
-          prerelease: false
-
+          project_id: stag-awhours
+          deliverables: ${{ github.workspace }}/stage-app.yaml
+          credentials: ${{ secrets.STAGING_GCP_SA_KEY }}
+          promote: false
+          version: 2
+        # Deploy into live Env if pull request merged in master branch
+        if: github.event_name == 'pull_request' && github.event.action == 'merged' && github.event.pull_request.base.ref == 'master'
+        uses: google-github-actions/deploy-appengine@main
+        with:
+          project_id: live-awhours
+          deliverables: ${{ github.workspace }}/live-app.yaml
+          credentials: ${{ secrets.LIVE_GCP_SA_KEY }}
+          promote: true
+          version: 2
