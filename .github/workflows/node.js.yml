@@ -24,12 +24,12 @@ jobs:
         uses: martinbeentjes/npm-get-version-action@master
         
         # Deploy into stage Env if pull request merged in dev branch
-      - if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.base.ref == 'main'
+      - if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.base.ref == 'master'
         name: Deploye stage
         run: |
           echo ${GITHUB_REF#refs/heads/}
         # Deploy into live Env if pull request merged in master branch
-      - if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.base.ref == 'master'
+      - if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.base.ref == 'main'
         name: Deploye live
         run: |
           echo ${GITHUB_REF#refs/heads/}
