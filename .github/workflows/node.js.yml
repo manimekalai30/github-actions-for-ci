@@ -23,7 +23,6 @@ jobs:
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
         
-      - name: deploy based on condition
         # Deploy into stage Env if pull request merged in dev branch
       - if: github.event_name == 'pull_request' && github.event.action == 'merged' && github.event.pull_request.base.ref == 'dev'
         uses: google-github-actions/deploy-appengine@main
