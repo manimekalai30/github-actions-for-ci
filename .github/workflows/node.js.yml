@@ -25,19 +25,11 @@ jobs:
         
         # Deploy into stage Env if pull request merged in dev branch
       - if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.base.ref == 'main'
-        uses: google-github-actions/deploy-appengine@main
-        with:
-          project_id: stag-awhours
-          deliverables: ${{ github.workspace }}/stage-app.yaml
-          credentials: ${{ secrets.STAGING_GCP_SA_KEY }}
-          promote: false
-          version: 2
+        name: Deploye stage
+        run: |
+          echo ${GITHUB_REF#refs/heads/}
         # Deploy into live Env if pull request merged in master branch
       - if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.base.ref == 'master'
-        uses: google-github-actions/deploy-appengine@main
-        with:
-          project_id: live-awhours
-          deliverables: ${{ github.workspace }}/live-app.yaml
-          credentials: ${{ secrets.LIVE_GCP_SA_KEY }}
-          promote: true
-          version: 2
+        name: Deploye live
+        run: |
+          echo ${GITHUB_REF#refs/heads/}
