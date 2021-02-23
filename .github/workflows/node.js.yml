@@ -1,9 +1,6 @@
 name: Publish a package
 on:
   push:
-     # Sequence of patterns matched against refs/tags
-    tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0 ect.,,
 jobs:
   run-build-test-lint-publish-package:
     runs-on: ubuntu-latest
