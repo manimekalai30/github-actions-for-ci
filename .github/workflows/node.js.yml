@@ -1,8 +1,6 @@
 name: Publish a package
 on:
-  pull_request:
-    types: [opened]
-    branches: [main]
+  push:
      # Sequence of patterns matched against refs/tags
     tags:
       - 'v*' # Push events to matching v*, i.e. v1.0 ect.,,
@@ -21,7 +19,10 @@ jobs:
           
       - name: Get version 
         id: package-version
-        uses: martinbeentjes/npm-get-version-action@master
+        uses: tyankatsu0105/read-package-version-actions@v1
+        
+      - name: Show version number
+        run: echo "Version is ${{ steps.package-version.outputs.version }}"
         
         # Deploy into stage Env if pull request merged in dev branch
       - if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.base.ref == 'master'
