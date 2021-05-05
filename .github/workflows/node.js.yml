@@ -1,6 +1,5 @@
 name: Publish a package
 on:
-  push:
   pull_request:
 jobs:
   run-build-test-lint-publish-package:
@@ -19,13 +18,14 @@ jobs:
       - uses: jwalton/gh-find-current-pr@v1
         id: findPr
         
-      - run: echo "Your PR is ${PR}"
+      - name: PR  
+        run: echo ${PR}
         env:
           PR: ${{ steps.findPr.outputs.pr }}
           
        # This will echo "Your PR is 7", or be skipped if there is no current PR.
       - run: echo steps.findPr.outputs.number
-      - run: echo ${{ steps.findPr.outputs.pr }} "...." ${{ steps.findPr.outputs.number }} 
+      - run: echo ${{ steps.findPr.outputs.pr }} "...." ${{ steps.findPr.outputs.body }} 
 
       - name: Get version 
         id: package-version
