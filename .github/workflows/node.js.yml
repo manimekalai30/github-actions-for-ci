@@ -15,22 +15,18 @@ jobs:
         run: |
           echo ${GITHUB_REF#refs/heads/}
           
-      - name: Get Pull Request Data
-        uses: jwalton/gh-find-current-pr@v1
+      # Find the PR associated with this push, if there is one.
+      - uses: jwalton/gh-find-current-pr@v1
         id: findPr
         
-      - name: PR Number
-        run: |
-          echo ${{ steps.findPr.outputs.pr }}
-          
-      - name: PR Title
-        run: |
-          echo ${{ steps.findPr.outputs.title }}
-          
-      - name: PR Body
-        run: |
-          echo ${{ steps.findPr.outputs.body }}
-          
+      # This will echo "Your PR is 7", or be skipped if there is no current PR.
+      - run: 
+          echo "hi" ${{ steps.findPr.outputs.body }}
+        env:
+          PR: ${{ steps.findPr.outputs.pr }}
+          BODY: ${{ steps.findPr.outputs.body }}
+          TITLE: ${{ steps.findPr.outputs.title }}
+
       - name: Get version 
         id: package-version
         uses: tyankatsu0105/read-package-version-actions@v1
