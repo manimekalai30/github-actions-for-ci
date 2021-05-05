@@ -16,7 +16,16 @@ jobs:
           echo ${GITHUB_REF#refs/heads/}
           
       - name: Get Pull Request Data
-        uses: simpleactions/get-pull-request@v1.0.0
+        uses: 8BitJonny/gh-get-current-pr@v1
+        id: PR
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          filterOutClosed: true
+      - run: echo "Your PR is ${prNumber} and its JSON is ${prJSON}"
+        if: success() && steps.PR.outputs.number
+        env:
+          prNumber: ${{ steps.PR.outputs.number }}
+          prJSON: ${{ steps.PR.outputs.pr }
         
       - name: Get version 
         id: package-version
