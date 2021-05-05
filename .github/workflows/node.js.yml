@@ -19,7 +19,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
           tag_name: ${{ github.event.number }} # Get version from package.json
-          release_name: Release ${{ github.event.number }}
+          release_name: Release ${{ github.event.title }}
           body: | # Changes or features in the corresponding release
             Package initial release 
           draft: false
