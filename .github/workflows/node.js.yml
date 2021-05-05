@@ -10,44 +10,11 @@ jobs:
         node-version: [12.x]
     steps:
       - uses: actions/checkout@v1
-
-      - name: Build
-        run: |
-          echo ${GITHUB_REF#refs/heads/}
-      - name: Title
-        run: |
-          echo ${{ github.ref }} 
-          echo ${{ github }} 
-#       - name: Get package version 
-#         id: findPr
-#         uses: jwalton/gh-find-current-pr@v1
-      
-#       - name: PR  
-#         run: echo ${PR}
-#         env:
-#           PR: ${{ steps.findPr.outputs.pr }}
-          
-#       - name: All info  
-#         run: echo steps.findPr.outputs
-          
-#        # This will echo "Your PR is 7", or be skipped if there is no current PR.
-#       - run: echo steps.findPr.outputs.number
-#       - run: echo ${{ steps.findPr.outputs.pr }} "...." ${{ steps.findPr.outputs.body }} 
-
-      - name: Get version 
-        id: package-version
-        uses: tyankatsu0105/read-package-version-actions@v1
-        
-      - name: Show version number
-        run: echo "Version is ${{ steps.package-version.outputs.version }}"
-        
-        # Deploy into stage Env if pull request merged in dev branch
-      - if: github.event_name == 'pull_request' && github.event.action == 'opened' && (github.event.pull_request.base.ref == 'master' ||  github.event.pull_request.base.ref == 'main')
-        name: Deploye stage
-        run: |
-          echo ${GITHUB_REF#refs/heads/}
-        # Deploy into live Env if pull request merged in master branch
-      - if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.base.ref == 'main'
-        name: Deploye live
-        run: |
-          echo ${GITHUB_REF#refs/heads/}
+      # Find the PR associated with this push, if there is one.
+      - uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+      # This will echo "Your PR is 7", or be skipped if there is no current PR.
+      - run: echo "Your PR is ${PR}"
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR: ${{ steps.findPr.outputs.pr }}
