@@ -1,6 +1,7 @@
 name: Publish a package
 on:
-  pull_request:
+  push:
+#   pull_request:
 jobs:
   run-build-test-lint-publish-package:
     runs-on: ubuntu-latest
@@ -13,22 +14,24 @@ jobs:
       - name: Build
         run: |
           echo ${GITHUB_REF#refs/heads/}
-          
-      - name: Get package version 
-        id: findPr
-        uses: jwalton/gh-find-current-pr@v1
+      - name: Title
+        run: |
+          echo ${{ github.ref }} 
+#       - name: Get package version 
+#         id: findPr
+#         uses: jwalton/gh-find-current-pr@v1
       
-      - name: PR  
-        run: echo ${PR}
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
+#       - name: PR  
+#         run: echo ${PR}
+#         env:
+#           PR: ${{ steps.findPr.outputs.pr }}
           
-      - name: All info  
-        run: echo steps.findPr.outputs
+#       - name: All info  
+#         run: echo steps.findPr.outputs
           
-       # This will echo "Your PR is 7", or be skipped if there is no current PR.
-      - run: echo steps.findPr.outputs.number
-      - run: echo ${{ steps.findPr.outputs.pr }} "...." ${{ steps.findPr.outputs.body }} 
+#        # This will echo "Your PR is 7", or be skipped if there is no current PR.
+#       - run: echo steps.findPr.outputs.number
+#       - run: echo ${{ steps.findPr.outputs.pr }} "...." ${{ steps.findPr.outputs.body }} 
 
       - name: Get version 
         id: package-version
