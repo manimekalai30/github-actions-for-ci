@@ -17,6 +17,7 @@ jobs:
       - name: Title
         run: |
           echo ${{ github.ref }} 
+          echo ${{ github }} 
 #       - name: Get package version 
 #         id: findPr
 #         uses: jwalton/gh-find-current-pr@v1
