@@ -1,6 +1,7 @@
 name: Publish a package
 on:
   push:
+  pull_request:
 jobs:
   run-build-test-lint-publish-package:
     runs-on: ubuntu-latest
