@@ -15,6 +15,9 @@ jobs:
         run: |
           echo ${GITHUB_REF#refs/heads/}
           
+      - name: Get Pull Request Data
+        uses: simpleactions/get-pull-request@v1.0.0
+        
       - name: Get version 
         id: package-version
         uses: tyankatsu0105/read-package-version-actions@v1
