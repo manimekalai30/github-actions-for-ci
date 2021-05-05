@@ -22,7 +22,7 @@ jobs:
         run: echo "Version is ${{ steps.package-version.outputs.version }}"
         
         # Deploy into stage Env if pull request merged in dev branch
-      - if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.base.ref == 'master'
+      - if: github.event_name == 'pull_request' && github.event.action == 'opened' && (github.event.pull_request.base.ref == 'master' ||  github.event.pull_request.base.ref == 'main')
         name: Deploye stage
         run: |
           echo ${GITHUB_REF#refs/heads/}
