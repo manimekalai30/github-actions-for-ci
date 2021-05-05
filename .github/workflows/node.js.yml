@@ -9,11 +9,18 @@ jobs:
         node-version: [12.x]
     steps:
       - uses: actions/checkout@v1
-      # Find the PR associated with this push, if there is one.
-      - uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-      # This will echo "Your PR is 7", or be skipped if there is no current PR.
-      - run: echo "Your PR is ${PR}"
-        if: success() && steps.findPr.outputs.number
+      - name: Get PR Number
+        run: |
+          ${{ github.event.number }}
+          
+      - name: Create Release
+        uses: actions/create-release@v1
         env:
-          PR: ${{ steps.findPr.outputs.pr }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.event.number }} # Get version from package.json
+          release_name: Release ${{ github.event.number }}
+          body: | # Changes or features in the corresponding release
+            Package initial release 
+          draft: false
+          prerelease: false # 
