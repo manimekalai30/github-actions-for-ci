@@ -21,7 +21,11 @@ jobs:
           script: |
             const core = require('@actions/core')
             const prNumber = context.payload.number;
+            const prTitle = context.payload.title;
+            const prBody = context.payload.body;
             core.exportVariable('PULL_NUMBER', prNumber);
+            core.exportVariable('TITLE', prTitle);
+            core.exportVariable('BODY', prBody);
             
 #       # Find the PR associated with this push, if there is one.
 #       - uses: jwalton/gh-find-current-pr@v1
