@@ -1,7 +1,6 @@
 name: Publish a package
 on:
   pull_request:
-    types: [opened]
 jobs:
   run-build-test-lint-publish-package:
     runs-on: ubuntu-latest
@@ -20,18 +19,23 @@ jobs:
         
       # This will echo "Your PR is 7", or be skipped if there is no current PR.
       - run: echo ${{ steps.findPr.outputs }}
-#         env:
-#           PR: ${{ steps.findPr.outputs.number }}
-     
-    
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      
+      - uses: actions/github-script@v4
+        id: set-result
         with:
-          tag_name: ${{ github.event.number }} # Get version from package.json
-          release_name: Release ${{ steps.findPr.outputs }}
-          body: | # Changes or features in the corresponding release
-            Package initial release 
-          draft: false
-          prerelease: false # 
+          script: return console.log(${{ steps.findPr.outputs }})
+          result-encoding: string
+      - name: Get result
+        run: echo "${{steps.set-result.outputs.result}}"
+    
+#       - name: Create Release
+#         uses: actions/create-release@v1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+#         with:
+#           tag_name: ${{ github.event.number }} # Get version from package.json
+#           release_name: Release ${{ steps.findPr.outputs }}
+#           body: | # Changes or features in the corresponding release
+#             Package initial release 
+#           draft: false
+#           prerelease: false # 
