@@ -1,7 +1,7 @@
 name: Publish a package
 on:
   pull_request:
-    types: [opened,closed]
+    types: [opened]
 jobs:
   run-build-test-lint-publish-package:
     runs-on: ubuntu-latest
@@ -14,13 +14,22 @@ jobs:
         run: |
           echo ${{ github.event.number }}
           
+      # Find the PR associated with this push, if there is one.
+      - uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        
+      # This will echo "Your PR is 7", or be skipped if there is no current PR.
+      - run: echo "Your PR is ${PR}"
+        env:
+          PR: ${{ steps.findPr.outputs.pr }}
+          
       - name: Create Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ github.event.number }} # Get version from package.json
-          release_name: Release ${{ github.event.number }}
+          tag_name: ${{ steps.findPr.outputs.pr }} # Get version from package.json
+          release_name: Release ${{ steps.findPr.outputs.title }}
           body: | # Changes or features in the corresponding release
             Package initial release 
           draft: false
