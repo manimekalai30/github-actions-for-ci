@@ -14,23 +14,35 @@ jobs:
         run: |
           echo ${{ github.event.number }}
           
-      # Find the PR associated with this push, if there is one.
-      - uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        
-      # This will echo "Your PR is 7", or be skipped if there is no current PR.
-      - run: echo "Your PR is ${PR}"
-        env:
-          PR: ${{ steps.findPr.outputs.number }}
-          
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      - name: Test
+        uses: actions/github-script@0.3.0
         with:
-          tag_name: test # Get version from package.json
-          release_name: Release ${{ steps.findPr.outputs.title }}
-          body: | # Changes or features in the corresponding release
-            Package initial release 
-          draft: false
-          prerelease: false # 
+          github-token: ${{github.token}}
+          script: |
+            const core = require('@actions/core')
+            const prNumber = context.payload.number;
+            core.exportVariable('PULL_NUMBER', prNumber);
+            
+#       # Find the PR associated with this push, if there is one.
+#       - uses: jwalton/gh-find-current-pr@v1
+#         id: findPr
+        
+#       # This will echo "Your PR is 7", or be skipped if there is no current PR.
+#       - run: echo "Your PR is ${PR}"
+#         env:
+#           PR: ${{ steps.findPr.outputs.number }}
+      - name: GET env
+        run: |
+          echo $PULL_NUMBER
+    
+#       - name: Create Release
+#         uses: actions/create-release@v1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+#         with:
+#           tag_name: ${{ github.event.number }} # Get version from package.json
+#           release_name: Release ${{ github.event.number }}
+#           body: | # Changes or features in the corresponding release
+#             Package initial release 
+#           draft: false
+#           prerelease: false # 
