@@ -13,20 +13,25 @@ jobs:
         run: |
           echo ${{ github.event.number }}
             
-      # Find the PR associated with this push, if there is one.
-      - uses: jwalton/gh-find-current-pr@v1
-        id: findPr
+#       # Find the PR associated with this push, if there is one.
+#       - uses: jwalton/gh-find-current-pr@v1
+#         id: findPr
         
-      # This will echo "Your PR is 7", or be skipped if there is no current PR.
-      - run: echo ${{ steps.findPr.outputs }}
+#       # This will echo "Your PR is 7", or be skipped if there is no current PR.
+#       - run: echo ${{ steps.findPr.outputs }}
       
-      - uses: actions/github-script@v4
-        id: set-result
+#       - uses: actions/github-script@v4
+#         id: set-result
+#         with:
+#           script: console.log(${{ steps.findPr.outputs }})
+#           result-encoding: string
+#       - name: Get result
+#         run: echo "${{steps.set-result.outputs.result}}"
+
+      - uses: actions/checkout@v2
+      - uses: etcdigital/pull-request-changelog@master
         with:
-          script: console.log(${{ steps.findPr.outputs }})
-          result-encoding: string
-      - name: Get result
-        run: echo "${{steps.set-result.outputs.result}}"
+          token: ${{ secrets.GITHUB_TOKEN }}
     
 #       - name: Create Release
 #         uses: actions/create-release@v1
